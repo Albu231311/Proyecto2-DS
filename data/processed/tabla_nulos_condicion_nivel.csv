@@ -1,0 +1,6 @@
+condicion,l1_l2,l2_l3,l3_l4,l4_l5,l5_s1
+left_neural_foraminal_narrowing,0.1,0.1,0.1,0.1,0.1
+left_subarticular_stenosis,8.3,4.15,0.15,0.15,0.56
+right_neural_foraminal_narrowing,0.41,0.41,0.41,0.41,0.41
+right_subarticular_stenosis,8.15,4.15,0.1,0.1,0.35
+spinal_canal_stenosis,0.05,0.05,0.05,0.05,0.05
