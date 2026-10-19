@@ -1,0 +1,295 @@
+{
+  "meta": {
+    "tipo": "metadatos_solo",
+    "descripcion": "Línea base sobre características tabulares (condition, level, series_description, instance_number, x, y). Sin imágenes DICOM.",
+    "split": "35/35/30 por study_id, semilla 42",
+    "n_train": 17006,
+    "n_val": 17039,
+    "n_test": 14612,
+    "clases": [
+      "Normal/Mild",
+      "Moderate",
+      "Severe"
+    ],
+    "distribucion_test": {
+      "Normal/Mild": 11258,
+      "Moderate": 2425,
+      "Severe": 929
+    },
+    "features": [
+      "condition_Left Neural Foraminal Narrowing",
+      "condition_Left Subarticular Stenosis",
+      "condition_Right Neural Foraminal Narrowing",
+      "condition_Right Subarticular Stenosis",
+      "condition_Spinal Canal Stenosis",
+      "level_L1/L2",
+      "level_L2/L3",
+      "level_L3/L4",
+      "level_L4/L5",
+      "level_L5/S1",
+      "series_description_Axial T2",
+      "series_description_Sagittal T1",
+      "series_description_Sagittal T2/STIR",
+      "grupo_canal",
+      "grupo_foraminal",
+      "grupo_subarticular",
+      "instance_number",
+      "x",
+      "y",
+      "x_norm",
+      "y_norm"
+    ]
+  },
+  "modelos": [
+    {
+      "modelo": "Clase_Mayoritaria",
+      "exactitud": 0.7704626334519573,
+      "f1_macro": 0.2901172529313233,
+      "balanced_accuracy": 0.3333333333333333,
+      "recall_severe": 0.0,
+      "recall_moderate": 0.0,
+      "recall_normal_mild": 1.0,
+      "precision_severe": 0.0,
+      "kappa_quadratic": 0.0,
+      "f1_per_class": [
+        0.8703517587939699,
+        0.0,
+        0.0
+      ],
+      "log_loss_std": 8.273365279708386,
+      "log_loss_rsna": 1.3498456109647297,
+      "t_train_s": null,
+      "t_infer_s": 0.000119,
+      "t_infer_ms_per_sample": 0.0,
+      "confusion_matrix": [
+        [
+          11258,
+          0,
+          0
+        ],
+        [
+          2425,
+          0,
+          0
+        ],
+        [
+          929,
+          0,
+          0
+        ]
+      ],
+      "val": {
+        "f1_macro": 0.2903927479103868,
+        "recall_severe": 0.0,
+        "balanced_accuracy": 0.3333333333333333,
+        "kappa_quadratic": 0.0,
+        "log_loss_rsna": 1.3448751119980882,
+        "confusion_matrix": [
+          [
+            13150,
+            0,
+            0
+          ],
+          [
+            2802,
+            0,
+            0
+          ],
+          [
+            1087,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "modelo": "Random_Forest",
+      "exactitud": 0.6546673966602792,
+      "f1_macro": 0.42996264519495453,
+      "balanced_accuracy": 0.44423194028303276,
+      "recall_severe": 0.2217438105489774,
+      "recall_moderate": 0.3562886597938144,
+      "recall_normal_mild": 0.7546633505063066,
+      "precision_severe": 0.16940789473684212,
+      "kappa_quadratic": 0.24657892029319683,
+      "f1_per_class": [
+        0.7951333645297145,
+        0.30267997898055704,
+        0.19207459207459207
+      ],
+      "log_loss_std": 0.7855599352160196,
+      "log_loss_rsna": 0.19723259211068614,
+      "t_train_s": 0.945,
+      "t_infer_s": 0.212688,
+      "t_infer_ms_per_sample": 0.0146,
+      "confusion_matrix": [
+        [
+          8496,
+          2067,
+          695
+        ],
+        [
+          1246,
+          864,
+          315
+        ],
+        [
+          370,
+          353,
+          206
+        ]
+      ],
+      "n_params": 3251706,
+      "val": {
+        "f1_macro": 0.43627992889899175,
+        "recall_severe": 0.22723091076356947,
+        "balanced_accuracy": 0.4502838395105045,
+        "kappa_quadratic": 0.26984569191353514,
+        "log_loss_rsna": 0.18889739196317398,
+        "confusion_matrix": [
+          [
+            10106,
+            2268,
+            776
+          ],
+          [
+            1389,
+            995,
+            418
+          ],
+          [
+            432,
+            408,
+            247
+          ]
+        ]
+      }
+    },
+    {
+      "modelo": "Gradient_Boosting",
+      "exactitud": 0.5396249657815494,
+      "f1_macro": 0.4146690315237369,
+      "balanced_accuracy": 0.5132515219695496,
+      "recall_severe": 0.5392895586652314,
+      "recall_moderate": 0.43917525773195876,
+      "recall_normal_mild": 0.5612897495114585,
+      "precision_severe": 0.14627737226277374,
+      "kappa_quadratic": 0.24157855827378827,
+      "f1_per_class": [
+        0.6938618644998353,
+        0.3200120192307692,
+        0.23013321084060634
+      ],
+      "log_loss_std": 0.8975096018292466,
+      "log_loss_rsna": 0.18108248281643782,
+      "t_train_s": 0.791,
+      "t_infer_s": 0.044949,
+      "t_infer_ms_per_sample": 0.0031,
+      "confusion_matrix": [
+        [
+          6319,
+          2847,
+          2092
+        ],
+        [
+          528,
+          1065,
+          832
+        ],
+        [
+          109,
+          319,
+          501
+        ]
+      ],
+      "val": {
+        "f1_macro": 0.4236838506943435,
+        "recall_severe": 0.562097516099356,
+        "balanced_accuracy": 0.527702625116151,
+        "kappa_quadratic": 0.2574216361484162,
+        "log_loss_rsna": 0.17810769120577521,
+        "confusion_matrix": [
+          [
+            7452,
+            3366,
+            2332
+          ],
+          [
+            530,
+            1273,
+            999
+          ],
+          [
+            145,
+            331,
+            611
+          ]
+        ]
+      }
+    },
+    {
+      "modelo": "Arbol_Decision",
+      "exactitud": 0.5046537092800438,
+      "f1_macro": 0.3931775256517736,
+      "balanced_accuracy": 0.5124346659724552,
+      "recall_severe": 0.6566200215285253,
+      "recall_moderate": 0.35670103092783506,
+      "recall_normal_mild": 0.5239829454610055,
+      "precision_severe": 0.12566955088586731,
+      "kappa_quadratic": 0.19645530496434993,
+      "f1_per_class": [
+        0.6649008115419297,
+        0.30366859750746006,
+        0.21096316790593117
+      ],
+      "log_loss_std": 0.9505829753673523,
+      "log_loss_rsna": 0.1887053690571176,
+      "t_train_s": 0.029,
+      "t_infer_s": 0.000979,
+      "t_infer_ms_per_sample": 0.0001,
+      "confusion_matrix": [
+        [
+          5899,
+          2200,
+          3159
+        ],
+        [
+          475,
+          865,
+          1085
+        ],
+        [
+          112,
+          207,
+          610
+        ]
+      ],
+      "n_params": 57,
+      "val": {
+        "f1_macro": 0.39908888467231013,
+        "recall_severe": 0.6761729530818767,
+        "balanced_accuracy": 0.5232739377824526,
+        "kappa_quadratic": 0.20489023888086166,
+        "log_loss_rsna": 0.18638733694750106,
+        "confusion_matrix": [
+          [
+            6927,
+            2591,
+            3632
+          ],
+          [
+            486,
+            1028,
+            1288
+          ],
+          [
+            146,
+            206,
+            735
+          ]
+        ]
+      }
+    }
+  ]
+}
