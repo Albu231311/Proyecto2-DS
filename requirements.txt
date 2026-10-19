@@ -1,0 +1,20 @@
+# Datos
+pandas>=2.0
+numpy>=1.26
+pydicom>=2.4
+Pillow>=10.0
+
+# Modelos
+# scikit-learn fijo en la versión con la que se entrenaron los .joblib de models/
+scikit-learn==1.9.0
+joblib>=1.3
+torch>=2.1
+torchvision>=0.16
+
+# Visualización (notebooks)
+matplotlib>=3.8
+seaborn>=0.13
+
+# Aplicación
+streamlit>=1.35
+plotly>=5.20
