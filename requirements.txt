@@ -17,4 +17,5 @@ seaborn>=0.13
 
 # Aplicación
 streamlit>=1.35
+streamlit-image-coordinates>=0.4   # clic sobre la imagen en la página Predecir
 plotly>=5.20
