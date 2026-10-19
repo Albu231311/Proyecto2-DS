@@ -3,3 +3,9 @@
 
 # Modelo pesado (286 MB): se descarga de Google Drive a models/
 models/random_forest_metadatos.joblib
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
