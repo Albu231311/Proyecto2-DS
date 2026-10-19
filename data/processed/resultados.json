@@ -1,6 +1,6 @@
 {
   "meta": {
-    "split": "70/15/15 por study_id, semilla 42",
+    "split": "35/35/30 por study_id, semilla 42",
     "n_train": 17006,
     "n_val": 17039,
     "n_test": 14612,
