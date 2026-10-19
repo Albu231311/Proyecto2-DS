@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Modelo pesado (286 MB): se descarga de Google Drive a models/
+models/random_forest_metadatos.joblib
