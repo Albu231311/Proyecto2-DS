@@ -1,0 +1,19 @@
+# Tema de la aplicación.
+# Streamlit lee este archivo desde la carpeta donde se ejecuta el comando,
+# por eso está en la raíz del proyecto: streamlit run app/Inicio.py
+
+[theme]
+base = "light"
+# Azul pizarra neutro: no se confunde con los colores de las clases de severidad
+primaryColor = "#2E4057"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F2F4F7"
+textColor = "#1F2933"
+font = "sans serif"
+
+[server]
+# Permite subir archivos DICOM grandes en la página de predicción (MB)
+maxUploadSize = 200
+
+[browser]
+gatherUsageStats = false
