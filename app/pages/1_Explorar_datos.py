@@ -447,5 +447,5 @@ with tab_var:
         "variables con muchos valores distintos).",
         "Ninguna de estas variables describe el tejido: todas dicen **qué** se evalúa y **dónde**. Eso pone "
         "un techo a los modelos de metadatos (F1 macro entre 0.39 y 0.43) y explica por qué la ResNet50, "
-        "que ve la imagen, los supera en todas las métricas balanceadas.",
+        "que ve la imagen, los supera con claridad (F1 macro de 0.667 y kappa de 0.65).",
     )

@@ -326,7 +326,7 @@ fig.update_traces(marker=dict(size=14, line=dict(width=2, color="white")),
                                 "<extra></extra>")
 fig.update_layout(xaxis=dict(title="Tiempo de esta predicción (ms, escala log)",
                              range=[log_ms.min() - 0.6, log_ms.max() + 0.6]),
-                  yaxis=dict(title="F1 macro en test", range=[0.2, 0.55]),
+                  yaxis=dict(title="F1 macro en test", range=[0.2, 0.75]),
                   showlegend=False)
 st.plotly_chart(aplicar_layout(fig, "Más arriba = mejor; más a la izquierda = más rápido", alto=380),
                 use_container_width=True)

@@ -153,12 +153,16 @@ if ver_metricas:
     st.plotly_chart(aplicar_layout(fig, "Métricas en test por modelo"), use_container_width=True)
 
     may = modelos["Clase_Mayoritaria"]
+    cnn_m, arbol_m = modelos["ResNet50_imagen"], modelos["Arbol_Decision"]
     pct_normal = dist_test["Normal/Mild"] / n_test
     hallazgo(
         f"La **clase mayoritaria** tiene la mayor exactitud ({may['exactitud']:.1%}), pero su F1 macro es "
         f"{may['f1_macro']:.3f} y su recall de Severe y su kappa son **0**: nunca detecta un caso Severe. "
-        "Los demás modelos bajan la exactitud a cambio de encontrar casos Moderate y Severe; la ResNet50 "
-        "es la mejor en las cuatro métricas que toman en cuenta el desbalance.",
+        "Los modelos de metadatos bajan mucho la exactitud a cambio de encontrar casos Moderate y Severe. "
+        f"La ResNet50 es la única que mantiene la exactitud cerca de la línea base ({cnn_m['exactitud']:.1%}) "
+        "sin dejar de detectar las clases minoritarias: es la mejor en F1 macro, balanced accuracy y kappa. "
+        f"En recall de Severe la supera el Árbol de Decisión ({arbol_m['recall_severe']:.3f} contra "
+        f"{cnn_m['recall_severe']:.3f}), pero a costa de marcar como Severe muchos casos que no lo son.",
         f"Es el desbalance que se vio en Explorar datos: el {pct_normal:.0%} de las etiquetas de test son "
         "Normal/Mild, así que responder siempre Normal/Mild ya da 77% de exactitud. Por eso la exactitud "
         "no sirve para comparar aquí: F1 macro y balanced accuracy le dan el mismo peso a cada clase, y "
@@ -205,16 +209,23 @@ if ver_confusion or ver_f1_clase:
     cnn = np.array(modelos["ResNet50_imagen"]["confusion_matrix"], dtype=float)
     rf = np.array(modelos["Random_Forest"]["confusion_matrix"], dtype=float)
     prec_sev_cnn = cnn[2, 2] / cnn[:, 2].sum()
+    f1_sev = {c: modelos[c]["f1_per_class"][2] for c in modelos if c != "Clase_Mayoritaria"}
+    mejor_f1_meta = max(v for c, v in f1_sev.items() if c != "ResNet50_imagen")
+    kappa_meta = max(modelos[c]["kappa_quadratic"] for c in modelos if c != "ResNet50_imagen")
     hallazgo(
-        "En todos los modelos el F1 de **Severe** es el más bajo y el de Normal/Mild el más alto. El "
-        f"Random Forest predice Normal/Mild en el {rf[:, 0].sum() / rf.sum():.0%} de los casos y deja "
-        f"pasar el {1 - rf[2, 2] / rf[2].sum():.0%} de los Severe. La ResNet50 hace lo contrario: encuentra "
-        f"el {cnn[2, 2] / cnn[2].sum():.0%} de los Severe, pero solo el {prec_sev_cnn:.0%} de lo que marca "
-        "como Severe lo es de verdad.",
-        "Con solo 6% de casos Severe, cada modelo elige en qué equivocarse. El entrenamiento con pesos "
-        "de clase (y, en la CNN, el muestreo balanceado) empuja a los modelos a buscar Severe, lo que "
-        "sube el recall pero también las falsas alarmas. Para un sistema de apoyo clínico es preferible "
-        "una falsa alarma que un caso grave sin detectar.",
+        "En los modelos de metadatos el F1 de **Severe** es el más bajo de las tres clases. El Random "
+        f"Forest predice Normal/Mild en el {rf[:, 0].sum() / rf.sum():.0%} de los casos y deja pasar el "
+        f"{1 - rf[2, 2] / rf[2].sum():.0%} de los Severe. La ResNet50 encuentra el {cnn[2, 2] / cnn[2].sum():.0%} "
+        f"de los Severe y el {prec_sev_cnn:.0%} de lo que marca como Severe lo es de verdad: su F1 de Severe "
+        f"es {f1_sev['ResNet50_imagen']:.3f}, contra {mejor_f1_meta:.3f} del mejor modelo de metadatos. "
+        f"Cuando falla con un caso Severe, lo clasifica como Moderate el "
+        f"{cnn[2, 1] / (cnn[2, 0] + cnn[2, 1]):.0%} de las veces.",
+        "Con solo 6% de casos Severe, cada modelo elige en qué equivocarse. Los pesos de clase (y, en la "
+        "CNN, el muestreo balanceado) empujan a los modelos a buscar Severe. La ResNet50, al ver la imagen, "
+        "se equivoca sobre todo entre clases vecinas, que es lo que premia el kappa cuadrático "
+        f"({modelos['ResNet50_imagen']['kappa_quadratic']:.2f} contra {kappa_meta:.2f} del mejor modelo de "
+        "metadatos). Para apoyo clínico, confundir Severe con Moderate es mucho menos grave que mandarlo "
+        "a Normal/Mild.",
     )
 
 # ════════════════════════════ 3. Tiempo contra rendimiento ════════════════════════════
@@ -243,7 +254,7 @@ if ver_tiempo:
         fig.update_layout(showlegend=False,
                           xaxis=dict(title=f"{tipo} ({unidad}, escala log)",
                                      range=[log_t.min() - 0.7, log_t.max() + 0.7]),
-                          yaxis=dict(title="F1 macro en test", range=[0.2, 0.55]))
+                          yaxis=dict(title="F1 macro en test", range=[0.2, 0.75]))
         st.plotly_chart(aplicar_layout(fig, "Más arriba = mejor; más a la izquierda = más barato", alto=400),
                         use_container_width=True)
         if sin_tiempo:
@@ -255,10 +266,10 @@ if ver_tiempo:
         f"Forest, **{rf['t_train_s']:.1f} s** en CPU, unas {cnn['t_train_s'] / rf['t_train_s']:,.0f} veces "
         f"menos. En inferencia, la CNN tarda {cnn['t_infer_ms_per_sample']:.1f} ms por muestra y el Random "
         f"Forest {rf['t_infer_ms_per_sample'] * 1000:.0f} µs.",
-        f"El costo extra de la CNN compra una mejora pequeña en F1 macro ({rf['f1_macro']:.3f} → "
-        f"{cnn['f1_macro']:.3f}) y una grande en recall de Severe ({rf['recall_severe']:.3f} → "
-        f"{cnn['recall_severe']:.3f}) y balanced accuracy. Los modelos de metadatos son baratos, pero "
-        "tienen un techo porque no ven la imagen (ver *Variables de los modelos* en Explorar datos).",
+        f"El costo extra de la CNN compra una mejora grande: F1 macro de {rf['f1_macro']:.3f} a "
+        f"{cnn['f1_macro']:.3f}, recall de Severe de {rf['recall_severe']:.3f} a {cnn['recall_severe']:.3f} "
+        f"y kappa de {rf['kappa_quadratic']:.3f} a {cnn['kappa_quadratic']:.3f}. Los modelos de metadatos son "
+        "baratos, pero tienen un techo porque no ven la imagen (ver *Variables de los modelos* en Explorar datos).",
     )
 
 # ════════════════════════════ 4. Curvas de entrenamiento de la CNN ════════════════════════════

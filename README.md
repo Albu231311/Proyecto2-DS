@@ -80,9 +80,9 @@ streamlit run app/Inicio.py
 | Modelo | Exactitud | F1 macro | Balanced acc. | Recall Severe | Kappa cuadrático |
 |---|---|---|---|---|---|
 | Clase mayoritaria | 0.770 | 0.290 | 0.333 | 0.000 | 0.000 |
-| Árbol de Decisión | 0.505 | 0.393 | 0.512 | 0.657 | 0.197 |
+| Árbol de Decisión | 0.505 | 0.393 | 0.512 | **0.657** | 0.197 |
 | Gradient Boosting | 0.540 | 0.415 | 0.513 | 0.539 | 0.242 |
 | Random Forest | 0.655 | 0.430 | 0.444 | 0.222 | 0.247 |
-| **ResNet50 (imagen)** | 0.548 | **0.451** | **0.602** | **0.717** | **0.255** |
+| **ResNet50 (imagen)** | 0.768 | **0.667** | **0.714** | 0.582 | **0.652** |
 
-La clase mayoritaria tiene la mayor exactitud solo porque el 77% de las muestras de test son Normal/Mild. La ResNet50 es el mejor modelo en todas las métricas que toman en cuenta el desbalance. Los detalles completos están en `data/processed/resultados.json` y en `figures/`.
+La clase mayoritaria tiene la mayor exactitud solo porque el 77% de las muestras de test son Normal/Mild. La ResNet50 es el mejor modelo en F1 macro, balanced accuracy y kappa cuadrático, y es el único que mantiene la exactitud cerca de la línea base sin dejar de detectar las clases minoritarias. El Árbol de Decisión tiene el mayor recall de Severe, pero a costa de muchas falsas alarmas. Los detalles completos están en `data/processed/resultados.json` y en `figures/`.
